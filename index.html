@@ -13,6 +13,30 @@
   <body>
     <script type="module" src="/src/main.ts"></script>
 
+    <!--Login-->
     <div data-netlify-identity-button></div>
+
+    <div v-if="isLoggedIn">
+      <p>Secret Content</p>
+    </div>
+    <div v-else>
+      <p>Not logged in!!</p>
+    </div>
   </body>
+  <script>
+    export default {
+      data() {
+        return {
+          isLoggedIn: false
+        }
+      },
+      async created() {
+        netlifyIdentity.on('init', (user) => {
+          if (user) {
+            this.isLoggedIn = true
+          }
+        })
+      }
+    }
+  </script>
 </html>
