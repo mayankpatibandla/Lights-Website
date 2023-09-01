@@ -4,18 +4,35 @@ import TheWelcome from './components/TheWelcome.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <!--Login-->
+  <div data-netlify-identity-button></div>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div v-if="isLoggedIn">
+    <p>Secret Content</p>
+  </div>
+  <div v-else>
+    <p>Not logged in!!</p>
+  </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      isLoggedIn: false
+    }
+  },
+  async created() {
+    // https://www.youtube.com/watch?v=uY1HTcTiUkM&list=PLwpjN-4DtVRZfN1GgXCkCNVC9V711zKfg&index=4
+    // 11:41
+    netlifyIdentity.on('init', async (user) => {
+      if (user) {
+        this.isLoggedIn = true
+      }
+    })
+  }
+}
+</script>
 
 <style scoped>
 header {

@@ -4,39 +4,10 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>xTigr's Lights</title>
-    <script
-      type="text/javascript"
-      src="https://identity.netlify.com/v1/netlify-identity-widget.js"
-    ></script>
+    <title>Vite App</title>
   </head>
   <body>
+    <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
-
-    <!--Login-->
-    <div data-netlify-identity-button></div>
-
-    <div v-if="isLoggedIn">
-      <p>Secret Content</p>
-    </div>
-    <div v-else>
-      <p>Not logged in!!</p>
-    </div>
   </body>
-  <script>
-    export default {
-      data() {
-        return {
-          isLoggedIn: false
-        }
-      },
-      async created() {
-        netlifyIdentity.on('init', (user) => {
-          if (user) {
-            this.isLoggedIn = true
-          }
-        })
-      }
-    }
-  </script>
 </html>
