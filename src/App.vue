@@ -1,64 +1,59 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <!--Login-->
-  <div data-netlify-identity-button></div>
-
-  <div v-if="isLoggedIn">
-    <p>Secret Content</p>
-  </div>
-  <div v-else>
-    <p>Not logged in!!</p>
+  <div id="app">
+    <div class="header">
+      <div data-netlify-identity-menu></div>
+    </div>
+    <div v-if="isLoggedIn">
+      <div><a href="https://google.com">ISLOGGEDIN!!!</a></div>
+    </div>
+    <div v-else><h1>NOT LOGGED IN!!!</h1></div>
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'App',
   data() {
     return {
-      isLoggedIn: false
+      isLoggedIn: false,
+      token: ''
     }
   },
   async created() {
-    // https://www.youtube.com/watch?v=uY1HTcTiUkM&list=PLwpjN-4DtVRZfN1GgXCkCNVC9V711zKfg&index=4
-    // 11:41
-    netlifyIdentity.on('init', async (user) => {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this
+
+    // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any
+    netlifyIdentity.on('init', async (user: any) => {
       if (user) {
-        this.isLoggedIn = true
+        self.token = user.token.access_token
+        self.isLoggedIn = true
       }
     })
+
+    // eslint-disable-next-line no-undef
+    netlifyIdentity.on('login', (user: { token: { access_token: string } }) => {
+      self.token = user.token.access_token
+      self.isLoggedIn = true
+    })
+
+    // eslint-disable-next-line no-undef
+    netlifyIdentity.on('logout', () => {
+      self.token = ''
+      self.isLoggedIn = false
+    })
   }
-}
+})
 </script>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 </style>
